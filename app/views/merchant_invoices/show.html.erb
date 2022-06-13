@@ -6,10 +6,15 @@
 <br><br>
 <% @invoice.invoice_items.each do |ii| %>
   <% if ii.item.merchant_id == params[:merchant_id].to_i %>
+  <div id="ii-<%= ii.id %>">
     <h3><%= ii.item.name %></h3>
     Quantity: <%= ii.quantity %><br>
     Unit Price: $<%= '%.2f' % ii.item.unit_price_to_dollars %><br>
-    <div id="ii-<%= ii.id %>">
+
+    <% if ii.qualify_for_discount? %>
+      <%= link_to "View Discount", "/merchants/#{ii.item.merchant_id}/bulk_discounts/#{ii.best_discount.id}" %>
+    <% end %>
+
       <%= form_with url: "/merchants/#{ii.item.merchant_id}/invoices/#{@invoice.id}", method: :patch, local: true do |form| %>
       <%= form.label :ii_status, "Status: "%>
       <%= form.select :ii_status, ["packaged", "pending", "shipped"], selected: ii.status %>
@@ -20,5 +25,5 @@
   <% end %>
 <% end %>
 
-Total Revenue: $<%= ('%.2f' % @invoice.total_revenue.fdiv(100)) %>
-Total Revenue After Discounts: $<%=  ('%.2f' % (@invoice.total_revenue - @invoice.total_revenue_after_discount.to_i).fdiv(100)) %>
+Total Revenue: $<%= ('%.2f' % @invoice.total_revenue.fdiv(100)) %><br>
+Total Revenue After Discounts: $<%=  ('%.2f' % (@invoice.total_revenue - @invoice.amount_off.to_i).fdiv(100)) %>

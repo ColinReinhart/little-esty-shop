@@ -55,4 +55,17 @@ RSpec.describe Invoice do
       expect(item_3.merchant).to eq(merch_2)
     end
   end
+
+  describe 'Instance methods' do
+    it "can find amount to be deducted from total revenue" do
+      @merch_1 = Merchant.create!(name: "Two-Legs Fashion")
+      @item_4 = @merch_1.items.create!(name: "Double Legged Pant", description: "pants built for people with two legs", unit_price: 10000)
+      @cust_1 = Customer.create!(first_name: "Debbie", last_name: "Twolegs")
+      @invoice_1 = @cust_1.invoices.create!(status: 1)
+      @bulk_discount1 = @merch_1.bulk_discounts.create!(name: "20% Off", percent_off: 0.20, threshold: 10)
+      @ii_4 = InvoiceItem.create!(item_id: @item_4.id, invoice_id: @invoice_1.id, quantity: 10, unit_price: @item_4.unit_price, status: 2)
+
+      expect(@invoice_1.amount_off.to_i).to eq(20000)
+    end
+  end
 end

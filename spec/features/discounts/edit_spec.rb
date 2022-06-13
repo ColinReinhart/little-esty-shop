@@ -13,6 +13,11 @@ RSpec.describe "Edit Discount page" do
     expect(current_path).to eq("/merchants/#{@merch_1.id}/bulk_discounts/#{@bulk_discount1.id}/edit")
 
     fill_in :name, with: "New Name"
+    fill_in :percent_off, with: ""
+    click_on "Submit"
+    expect(current_path).to eq("/merchants/#{@merch_1.id}/bulk_discounts/#{@bulk_discount1.id}/edit")
+
+    fill_in :name, with: "New Name"
     fill_in :percent_off, with: ".5"
     fill_in :threshold, with: 200
     click_on "Submit"

@@ -91,4 +91,25 @@ RSpec.describe "merchant's invoice show page", type: :feature do
     expect(page).to have_content("Total Revenue: $1110.00")
     expect(page).to have_content("Total Revenue After Discounts: $910.00")
   end
+
+  it "has link to view applied discounts" do
+    @item_3 = @merch_1.items.create!(name: "Hat", description: "hat built for people with two legs and one head", unit_price: 6000)
+    @item_4 = @merch_1.items.create!(name: "Double Legged Pant", description: "pants built for people with two legs", unit_price: 10000)
+    @ii_3 = InvoiceItem.create!(item_id: @item_3.id, invoice_id: @invoice_1.id, quantity: 1, unit_price: @item_3.unit_price, status: 2)
+    @ii_4 = InvoiceItem.create!(item_id: @item_4.id, invoice_id: @invoice_1.id, quantity: 10, unit_price: @item_4.unit_price, status: 2)
+
+    visit "/merchants/#{@merch_1.id}/invoices/#{@invoice_1.id}"
+
+    within "#ii-#{@ii_1.id}" do
+      expect(page).to_not have_link("View Discount")
+    end
+
+    within "#ii-#{@ii_4.id}" do
+      expect(page).to have_link("View Discount")
+      click_link "View Discount"
+      expect(current_path).to eq("/merchants/#{@merch_1.id}/bulk_discounts/#{@bulk_discount1.id}")
+    end
+
+    expect(page).to have_content("20% Off")
+  end
 end
