@@ -12,7 +12,7 @@
     Unit Price: $<%= '%.2f' % ii.item.unit_price_to_dollars %><br>
 
     <% if ii.qualify_for_discount? %>
-      <%= link_to "View Discount", "/merchants/#{ii.item.merchant_id}/bulk_discounts/#{ii.best_discount.id}" %>
+      <%= link_to "View Discount", merchant_bulk_discount_path(ii.item.merchant, ii.best_discount) %>
     <% end %>
 
       <%= form_with url: "/merchants/#{ii.item.merchant_id}/invoices/#{@invoice.id}", method: :patch, local: true do |form| %>

@@ -6,6 +6,6 @@
 <h2 align="left"><%= merchant.name %></h2>
 <div align="right">
   <p ><%= link_to "Dashboard", "/merchants/#{merchant.id}/dashboard" %>
-  <%= link_to "My Items", "/merchants/#{merchant.id}/items" %>
-  <%= link_to "My Invoices", "/merchants/#{merchant.id}/invoices" %></p>
+  <%= link_to "My Items", merchant_items_path(merchant) %>
+  <%= link_to "My Invoices", merchant_invoices_path(merchant) %></p>
 </div>

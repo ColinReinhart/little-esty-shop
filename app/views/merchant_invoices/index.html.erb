@@ -1,5 +1,5 @@
 <%= render partial: "shared/merchant_header", object: @merchant, :as => :merchant %>
 <h1>Invoice Index for <%= "#{@merchant.name}" %></h1>
 <% @merchant.invoices.uniq.each do |invoice| %>
-  <%= link_to invoice.id, "/merchants/#{@merchant.id}/invoices/#{invoice.id}" %><br>
+  <%= link_to invoice.id, merchant_invoice_path(@merchant, invoice) %><br>
 <% end %>

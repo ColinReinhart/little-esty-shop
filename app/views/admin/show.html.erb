@@ -2,11 +2,10 @@
 
 <h3>Incomplete Invoices</h3>
 <% @invoices.incomplete_invoices_ordered.each do |invoice| %>
-  <%= link_to "#{invoice.id}", "/admin/invoices/#{invoice.id}" %>
+  <%= link_to "#{invoice.id}", invoice_path(invoice) %>
   <%= " - #{invoice.created_at.strftime("%A, %B %d, %Y")}" %>
   <br>
 <% end %>
-
 
 <div id='top_5'>
   <h3>Top 5 Customers</h3>

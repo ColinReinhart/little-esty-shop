@@ -4,7 +4,7 @@
     <div id="item-<%= index %>">
         <%= invoice_item.item.name %>
         &nbsp
-        <%= link_to "Invoice ##{invoice_item.invoice.id}", "/merchants/#{@merchant.id}/invoices/#{invoice_item.invoice.id}" %>
+        <%= link_to "Invoice ##{invoice_item.invoice.id}", merchant_invoice_path(@merchant, invoice_item.invoice) %>
         - <%= invoice_item.created_at.strftime(" %A, %B %e, %Y") %>
     </div>
 <% end %>
@@ -15,4 +15,4 @@
     </div>
 <% end %>
 
-<%= link_to "View All Discounts", "/merchants/#{@merchant.id}/bulk_discounts" %>
+<%= link_to "View All Discounts", merchant_bulk_discounts_path(@merchant) %>

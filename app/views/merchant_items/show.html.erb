@@ -2,4 +2,4 @@
 <p><b><%= @item.name %><b></p>
 <p>Description: <%= @item.description %></p>
 <p>Current Price: $<%= '%.2f' % @item.unit_price_to_dollars %></p>
-<p><%= link_to 'Update Item', "/merchants/#{@item.merchant_id}/items/#{@item.id}/edit" %></p>
+<p><%= link_to 'Update Item', edit_merchant_item_path(@item.merchant, @item) %></p>
