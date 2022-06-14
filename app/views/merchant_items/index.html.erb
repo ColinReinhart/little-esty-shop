@@ -1,6 +1,5 @@
 <%= render partial: "shared/merchant_header", object: @merchant, :as => :merchant %>
 
-
 <h3 align="center">My Items:</h3>
 <ul>
 <div id="disabled">
@@ -9,7 +8,7 @@
     <div id="item-<%= item.id %>">
       <% if item.status == "disabled" %>
         <li><%= item.name %>
-        <%= button_to "Enable", "/merchants/#{@merchant.id}/items/#{item.id}", method: :patch, params: {status: "enabled", item_id: "#{item.id}"} %>
+        <%= button_to "Enable", merchant_item_path(@merchant, item), method: :patch, params: {status: "enabled", item_id: "#{item.id}"} %>
         </li>
       <% end %>
     </div>
@@ -23,7 +22,7 @@
     <div id="item-<%= item.id %>">
       <% if item.status == "enabled" %>
         <li><%= item.name %>
-        <%= button_to "Disable", "/merchants/#{@merchant.id}/items/#{item.id}", method: :patch, params: {status: "disabled", item_id: "#{item.id}"} %>
+        <%= button_to "Disable", merchant_item_path(@merchant, item), method: :patch, params: {status: "disabled", item_id: "#{item.id}"} %>
         </li>
       <% end %>
     </div>
@@ -31,11 +30,11 @@
 </div>
 </ul>
 
-<%= link_to "New Item", "/merchants/#{@merchant.id}/items/new" %>
+<%= link_to "New Item", new_merchant_item_path(@merchant) %>
 
   <h3>Best Selling Items</h3>
   <ol id="top_5_items">
   <% @merchant.top_5_items.each do |best_seller| %>
-    <li><%= link_to "#{best_seller.name}", "/merchants/#{@merchant.id}/items/#{best_seller.id}" %> - Total Revenue: $<%= best_seller.total_revenue %>. Top selling date for <%= best_seller.name %> was <%= best_seller.best_date.strftime('%B %d, %Y') %>.</li>
+    <li><%= link_to "#{best_seller.name}", merchant_item_path(@merchant, best_seller) %> - Total Revenue: $<%= best_seller.total_revenue %>. Top selling date for <%= best_seller.name %> was <%= best_seller.best_date.strftime('%B %d, %Y') %>.</li>
   <% end %>
 </ol>

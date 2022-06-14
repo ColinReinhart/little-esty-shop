@@ -21,18 +21,16 @@ RSpec.describe "merchant dashboard", type: :feature do
     @invoice_6 = @cust_2.invoices.create!(status: 1)
 
     @bulk_discount1 = BulkDiscount.create!(name: "%20 Off", percent_off: 0.1, threshold: 10, merchant_id: @merch_1.id)
+
+    visit "/merchants/#{@merch_1.id}/dashboard"
   end
 
   it "shows name of merchant" do
-    visit "/merchants/#{@merch_1.id}/dashboard"
-
     expect(page).to have_content("Schroeder-Jerde")
     expect(page).to_not have_content("Klein, Rempel and Jones")
   end
 
   it "has links to merchant items index and merchant invoices index" do
-    visit "/merchants/#{@merch_1.id}/dashboard"
-
     expect(page).to have_link("My Items", href: "/merchants/#{@merch_1.id}/items")
     expect(page).to have_link("My Invoices", href: "/merchants/#{@merch_1.id}/invoices")
     expect(page).to_not have_link("My Items", href: "/merchants/#{@merch_2.id}/items")
@@ -244,15 +242,15 @@ RSpec.describe "merchant dashboard", type: :feature do
 
     expect(page).to have_link("View All Discounts")
     click_link "View All Discounts"
-    expect(current_path).to eq("/merchants/#{@merch_1.id}/bulk_discounts")
+    expect(current_path).to eq(merchant_bulk_discounts_path(@merch_1))
   end
 
   it 'has links to each discounts show page' do
-    visit "/merchants/#{@merch_1.id}/bulk_discounts"
+    visit merchant_bulk_discounts_path(@merch_1)
 
     expect(page).to have_link(@bulk_discount1.name)
     click_link "#{@bulk_discount1.name}"
-    expect(current_path).to eq("/merchants/#{@merch_1.id}/bulk_discounts/#{@bulk_discount1.id}")
+    expect(current_path).to eq(merchant_bulk_discount_path(@merch_1, @bulk_discount1))
   end
 
 end

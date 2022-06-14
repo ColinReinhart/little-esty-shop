@@ -28,7 +28,6 @@ RSpec.describe Item do
     end
   end
 
-
   describe '#best_date' do
     it "gets the date for the invoice with the most popular item" do
       @merch_1 = Merchant.create!(name: "Two-Legs Fashion")
@@ -102,6 +101,20 @@ RSpec.describe Item do
       @transaction_15 = @invoice_15.transactions.create!(credit_card_number: 4023948573948293, result: "success")
 
       expect(@item_5.best_date.strftime('%B %d, %Y')).to eq("January 15, 1990")
+    end
+  end
+
+  describe "#total_revenue" do
+    before :each do
+      @merch_1 = Merchant.create!(name: "Two-Legs Fashion")
+      @item_4 = @merch_1.items.create!(name: "Double Legged Pant", description: "pants built for people with two legs", unit_price: 10000)
+      @cust_1 = Customer.create!(first_name: "Debbie", last_name: "Twolegs")
+      @invoice_1 = @cust_1.invoices.create!(status: 1)
+      @bulk_discount1 = @merch_1.bulk_discounts.create!(name: "20% Off", percent_off: 0.20, threshold: 10)
+      @ii_4 = InvoiceItem.create!(item_id: @item_4.id, invoice_id: @invoice_1.id, quantity: 10, unit_price: @item_4.unit_price, status: 2)
+    end
+    it "can find the total_revenue" do
+      expect(@item_4.total_revenue).to eq("1000.00")
     end
   end
 end

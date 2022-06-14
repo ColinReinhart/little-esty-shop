@@ -21,27 +21,24 @@ RSpec.describe "Discounts Index" do
     @invoice_6 = @cust_2.invoices.create!(status: 1)
 
     @bulk_discount1 = BulkDiscount.create!(name: "%20 Off", percent_off: 0.2, threshold: 10, merchant_id: @merch_1.id)
-  end
-  it "shows the discount name, percentage, threshold and merchant"do
-    visit "/merchants/#{@merch_1.id}/bulk_discounts"
 
+    visit merchant_bulk_discounts_path(@merch_1)
+  end
+
+  it "shows the discount name, percentage, threshold and merchant"do
     expect(page).to have_link("%20 Off")
     expect(page).to have_content("Get 20% off when you buy 10")
     click_link "%20 Off"
-    expect(current_path).to eq("/merchants/#{@merch_1.id}/bulk_discounts/#{@bulk_discount1.id}")
+    expect(current_path).to eq(merchant_bulk_discount_path(@merch_1, @bulk_discount1))
   end
 
   it "has link to create new discount" do
-    visit "/merchants/#{@merch_1.id}/bulk_discounts"
-
     expect(page).to have_link("Create New Bulk Discount")
     click_link "Create New Bulk Discount"
     expect(current_path).to eq(new_merchant_bulk_discount_path(@merch_1))
   end
 
   it "can delete a discount" do
-    visit "/merchants/#{@merch_1.id}/bulk_discounts"
-
     within "##{@bulk_discount1.id}" do
       expect(page).to have_link("Delete Discount")
       click_link "Delete Discount"
@@ -51,8 +48,6 @@ RSpec.describe "Discounts Index" do
   end
 
   it "shows next three holidays" do
-    visit "/merchants/#{@merch_1.id}/bulk_discounts"
-
     expect(page).to have_content("Juneteenth")
     expect(page).to have_content("Independence Day")
     expect(page).to have_content("Labour Day")

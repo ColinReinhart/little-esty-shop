@@ -1,4 +1,4 @@
-<%= form_with url: "/admin/merchants", method: :post, local: true do |f| %>
+<%= form_with url: merchants_path, method: :post, local: true do |f| %>
   <%= f.label :name %>
   <%= f.text_field :name %>
   <%= f.submit "Submit" %>

@@ -24,7 +24,7 @@ RSpec.describe "merchant's invoice show page", type: :feature do
   end
 
   it "shows invoice ID, invoice status, created at time formatted and customer name" do
-    visit "/merchants/#{@merch_1.id}/invoices/#{@invoice_1.id})"
+    visit merchant_invoice_path(@merch_1, @invoice_1)
 
     expect(page).to have_content("Invoice ID: #{@invoice_1.id}")
     expect(page).to have_content("Status: in progress")
@@ -43,7 +43,7 @@ RSpec.describe "merchant's invoice show page", type: :feature do
 
     invoice_item = InvoiceItem.create!(item_id: item.id, invoice_id: @invoice_1.id, quantity: 6, unit_price: item.unit_price, status: 1)
 
-    visit "/merchants/#{@merch_1.id}/invoices/#{@invoice_1.id})"
+    visit merchant_invoice_path(@merch_1, @invoice_1)
     expect(page).to have_content("Two-Leg Pantaloons")
     expect(page).to have_content("Quantity: 1")
     expect(page).to have_content("Unit Price: $50.00")
@@ -65,18 +65,18 @@ RSpec.describe "merchant's invoice show page", type: :feature do
     @ii_4 = InvoiceItem.create!(item_id: @item_4.id, invoice_id: @invoice_1.id, quantity: 1, unit_price: @item_4.unit_price, status: 2)
 
 
-    visit "/merchants/#{@merch_1.id}/invoices/#{@invoice_1.id})"
+    visit merchant_invoice_path(@merch_1, @invoice_1)
     expect(page).to have_content("Total Revenue: $610.00")
   end
 
   it "can change the invoice status" do
-    visit "/merchants/#{@merch_1.id}/invoices/#{@invoice_1.id}"
-    #within the first item section
+    visit merchant_invoice_path(@merch_1, @invoice_1)
+
       within "#ii-#{@ii_1.id}" do
         expect(find_field('ii_status').value).to eq("packaged")
         select "pending"
         click_button "Update Invoice"
-        expect(current_path).to eq( "/merchants/#{@merch_1.id}/invoices/#{@invoice_1.id}" )
+        expect(current_path).to eq(merchant_invoice_path(@merch_1, @invoice_1))
         expect(page).to have_content('pending')
       end
   end
@@ -86,7 +86,7 @@ RSpec.describe "merchant's invoice show page", type: :feature do
     @item_4 = @merch_1.items.create!(name: "Double Legged Pant", description: "pants built for people with two legs", unit_price: 10000)
     @ii_3 = InvoiceItem.create!(item_id: @item_3.id, invoice_id: @invoice_1.id, quantity: 1, unit_price: @item_3.unit_price, status: 2)
     @ii_4 = InvoiceItem.create!(item_id: @item_4.id, invoice_id: @invoice_1.id, quantity: 10, unit_price: @item_4.unit_price, status: 2)
-    visit "/merchants/#{@merch_1.id}/invoices/#{@invoice_1.id}"
+    visit merchant_invoice_path(@merch_1, @invoice_1)
 
     expect(page).to have_content("Total Revenue: $1110.00")
     expect(page).to have_content("Total Revenue After Discounts: $910.00")
@@ -98,7 +98,7 @@ RSpec.describe "merchant's invoice show page", type: :feature do
     @ii_3 = InvoiceItem.create!(item_id: @item_3.id, invoice_id: @invoice_1.id, quantity: 1, unit_price: @item_3.unit_price, status: 2)
     @ii_4 = InvoiceItem.create!(item_id: @item_4.id, invoice_id: @invoice_1.id, quantity: 10, unit_price: @item_4.unit_price, status: 2)
 
-    visit "/merchants/#{@merch_1.id}/invoices/#{@invoice_1.id}"
+    visit merchant_invoice_path(@merch_1, @invoice_1)
 
     within "#ii-#{@ii_1.id}" do
       expect(page).to_not have_link("View Discount")
@@ -107,7 +107,7 @@ RSpec.describe "merchant's invoice show page", type: :feature do
     within "#ii-#{@ii_4.id}" do
       expect(page).to have_link("View Discount")
       click_link "View Discount"
-      expect(current_path).to eq("/merchants/#{@merch_1.id}/bulk_discounts/#{@bulk_discount1.id}")
+      expect(current_path).to eq(merchant_bulk_discount_path(@merch_1, @bulk_discount1))
     end
 
     expect(page).to have_content("20% Off")

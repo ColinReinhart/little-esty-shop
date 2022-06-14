@@ -2,12 +2,12 @@
 <h1>Invoice: #<%= @invoice.id %></h1>
 <ul>
 
-  <%= form_with url: "/admin/invoices/#{@invoice.id}", method: :patch do |f| %>
+  <%= form_with url: invoice_path(@invoice), method: :patch do |f| %>
     <li>Status: <%= f.select :status, options_for_select(Invoice.statuses.keys.map{ |key| [key] }, selected: @invoice.status) %>
                 <%= f.submit "Update Invoice Status"%>
   <% end %></li>
-  <li>Created at: <%= @invoice.created_at.strftime("%A, %B %d, %Y") %></li>
 
+  <li>Created at: <%= @invoice.created_at.strftime("%A, %B %d, %Y") %></li>
   <li>Total Revenue: $<%= ('%.2f' % @invoice.total_revenue.fdiv(100)) %></li>
   <li>Total Revenue After Discounts: $<%= ('%.2f' % (@invoice.total_revenue - @invoice.amount_off.to_i).fdiv(100)) %></li>
   <li> Customer Name: <%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %></li>
