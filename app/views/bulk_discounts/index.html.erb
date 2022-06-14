@@ -8,10 +8,8 @@ Get <%= (discount.percent_off * 100).to_i %>% off when you buy <%= discount.thre
 <% end %>
 <h6><%= link_to "Create New Bulk Discount", new_merchant_bulk_discount_path(@merchant), method: :get %></h6>
 
-<header>
-</header>
-  Upcoming Holidays
-  <% @holidays.each do |holiday| %>
-  <%= holiday.name %>
-  <%= holiday.date %>
-  <% end %>
+<h3>Upcoming Holidays</h3>
+<% @holidays.each do |holiday| %>
+<%= holiday.name %>
+ on <%= holiday.date %><br>
+<% end %>

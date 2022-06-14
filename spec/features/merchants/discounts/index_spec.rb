@@ -48,6 +48,14 @@ RSpec.describe "Discounts Index" do
     end
     expect(page).to_not have_content("%20 Off")
     expect(page).to_not have_content("Get 20% off when you buy 10")
+  end
 
+  it "shows next three holidays" do
+    visit "/merchants/#{@merch_1.id}/bulk_discounts"
+
+    expect(page).to have_content("Juneteenth")
+    expect(page).to have_content("Independence Day")
+    expect(page).to have_content("Labour Day")
+    expect(page).to_not have_content("Columbus day")
   end
 end
