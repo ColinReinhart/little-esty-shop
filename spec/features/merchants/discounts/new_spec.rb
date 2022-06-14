@@ -24,7 +24,7 @@ RSpec.describe "New Discount" do
   end
 
   it "can create a new discount" do
-    visit "merchants/#{@merch_1.id}/bulk_discounts/new"
+    visit new_merchant_bulk_discount_path(@merch_1)
 
     fill_in :name, with: "5% Off"
     click_on "Submit"

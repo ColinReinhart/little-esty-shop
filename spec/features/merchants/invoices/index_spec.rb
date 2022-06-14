@@ -130,23 +130,19 @@ RSpec.describe 'merchants invoices index', type: :feature do
       created_at: Date.current,
       updated_at: Date.current
     )
+      visit merchant_invoices_path(@merch_1)
   end
 
   it "displays all the invoices that include at least one of the merchants items" do
-    visit "/merchants/#{@merch_1.id}/invoices"
-
     expect(page).to have_content(@invoice_1.id)
     expect(page).to have_content(@invoice_2.id)
     expect(page).to have_content(@invoice_3.id)
     expect(page).to_not have_content(@invoice_16.id)
     expect(page).to_not have_content(@invoice_17.id)
-
   end
 
   it "has links to the merchant invoice show" do
-    visit "/merchants/#{@merch_1.id}/invoices"
-
     click_link "#{@invoice_1.id}"
-    expect(current_path).to eq("/merchants/#{@merch_1.id}/invoices/#{@invoice_1.id}")
+    expect(current_path).to eq(merchant_invoice_path(@merch_1, @invoice_1))
   end
 end

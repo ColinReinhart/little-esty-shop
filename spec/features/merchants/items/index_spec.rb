@@ -26,10 +26,10 @@ RSpec.describe 'merchant items index page' do
 
     @trans_1 = @invoice_1.transactions.create!(credit_card_number: '4444555566667777', result: 'success')
 
+    visit merchant_items_path(@merch_1)
   end
 
   it 'displays a list of the names of all the merchants items and none from any other merchant' do
-    visit "merchants/#{@merch_1.id}/items"
     expect(page).to have_content("Two-Leg Pantaloons")
     expect(page).to have_content("Two-Leg Shorts")
     expect(page).to have_content("Hat")
@@ -40,7 +40,6 @@ RSpec.describe 'merchant items index page' do
   end
 
   it 'can disable/enable an item and the items are separated and displayed by status' do
-    visit "/merchants/#{@merch_1.id}/items"
     within "#disabled" do
       within "#item-#{@item_1.id}" do
         expect(page).to_not have_button("Disable")
@@ -58,15 +57,12 @@ RSpec.describe 'merchant items index page' do
   end
 
   it 'has a link to create a new item' do
-    visit "/merchants/#{@merch_1.id}/items"
     click_link("New Item")
     expect(current_path).to eq("/merchants/#{@merch_1.id}/items/new")
 
   end
 
   it "lists the 5 most popular items by revenue" do
-    visit "/merchants/#{@merch_1.id}/items"
-
     within "#top_5_items" do
       expect(@item_6.name).to appear_before(@item_5.name)
       expect(@item_5.name).to appear_before(@item_4.name)
@@ -122,7 +118,7 @@ RSpec.describe 'merchant items index page' do
     ii11 = InvoiceItem.create!(quantity: 5, unit_price: 100, status: 2, item_id: item11.id, invoice_id: invoice2.id)
     ii12 = InvoiceItem.create!(quantity: 0, unit_price: 100, status: 2, item_id: item12.id, invoice_id: invoice2.id)
 
-    visit "/merchants/#{merch1.id}/items"
+    visit merchant_items_path(merch1)
 
     within "#top_5_items" do
       expect(page).to have_content("Top selling date for #{item5.name} was #{item5.invoices.first.created_at.strftime('%B %d, %Y')}")

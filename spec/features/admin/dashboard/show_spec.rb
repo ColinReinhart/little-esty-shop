@@ -72,30 +72,25 @@ RSpec.describe "Admin dashboard" do
     @transaction_14 = @invoice_14.transactions.create!(credit_card_number: 4023948573948293, result: "success")
     @transaction_15 = @invoice_15.transactions.create!(credit_card_number: 4023948573948293, result: "success")
 
+    visit admin_path
   end
 
   it "shows the admin dashboard" do
-    visit '/admin'
-  
     expect(page).to have_content "Admin Dashboard"
   end
 
   it "has links to admin/merchants and admin/invoices" do
-    visit '/admin'
-
     click_link "Merchants"
-    expect(current_path).to eq "/admin/merchants"
+    expect(current_path).to eq(merchants_path)
 
-    visit '/admin'
+    visit admin_path
 
     click_link "Invoices"
-    expect(current_path).to eq "/admin/invoices"
+    expect(current_path).to eq(invoices_path)
   end
 
   it "displays the incomplete invoices and links to that invoices admin show" do
-    visit '/admin'
-
-    expect(page).to have_content "Incomplete Invoices"
+    expect(page).to have_content("Incomplete Invoices")
     expect(page).to have_content(@invoice_1.id)
     expect(page).to have_content(@invoice_2.id)
     expect(page).to have_content(@invoice_3.id)
@@ -106,7 +101,7 @@ RSpec.describe "Admin dashboard" do
     expect(page).to_not have_content(@invoice_7.id)
 
     click_link "#{@invoice_1.id}"
-    expect(current_path).to eq "/admin/invoices/#{@invoice_1.id}"
+    expect(current_path).to eq(invoice_path(@invoice_1))
   end
 
   it "displays the incomplete invoices created at dates and orders them by oldest to youngest" do
@@ -150,7 +145,7 @@ RSpec.describe "Admin dashboard" do
     @transaction_27 = @invoice_27.transactions.create!(credit_card_number: 4023948573948293, result: "success")
     @transaction_28 = @invoice_28.transactions.create!(credit_card_number: 4023948573948293, result: "success")
 
-    visit '/admin'
+    visit admin_path
 
     within "#top_5" do
       expect("Debbie Twolegs").to appear_before("Brian Twinlegs")
