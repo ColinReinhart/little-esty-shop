@@ -16,7 +16,7 @@ class AdminMerchantsController < ApplicationController
     if merchant.update(merchant_params)
 
         if params[:status].present?
-          redirect_to "/admin/merchants/"
+          redirect_to merchants_path
           flash[:success] = "Merchant successfully updated!"
         else
           redirect_to "/admin/merchants/#{merchant.id}"
