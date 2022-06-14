@@ -35,7 +35,7 @@ RSpec.describe 'Admin invoices show page' do
     @invoice_14 = @cust_7.invoices.create!(status: 1)
     @invoice_15 = @cust_7.invoices.create!(status: 2)
 
-    @ii_1 = InvoiceItem.create!(item_id: @item_1.id, invoice_id: @invoice_1.id, quantity: 1, unit_price: @item_1.unit_price, status: 2)
+    @ii_1 = InvoiceItem.create!(item_id: @item_1.id, invoice_id: @invoice_1.id, quantity: 10, unit_price: @item_1.unit_price, status: 2)
     @ii_2 = InvoiceItem.create!(item_id: @item_1.id, invoice_id: @invoice_2.id, quantity: 1, unit_price: @item_1.unit_price, status: 2)
     @ii_3 = InvoiceItem.create!(item_id: @item_1.id, invoice_id: @invoice_3.id, quantity: 1, unit_price: @item_1.unit_price, status: 2)
     @ii_4 = InvoiceItem.create!(item_id: @item_1.id, invoice_id: @invoice_4.id, quantity: 1, unit_price: @item_1.unit_price, status: 2)
@@ -82,7 +82,7 @@ RSpec.describe 'Admin invoices show page' do
     InvoiceItem.create!(item_id: item_1.id, invoice_id: @invoice_1.id, quantity: 3, unit_price: item_1.unit_price, status: 2)
     visit "/admin/invoices/#{@invoice_1.id}"
 
-    expect(page).to have_content("Total Revenue: $154.97")
+    expect(page).to have_content("Total Revenue: $604.97")
   end
 
   it "has a select menu for the invoice status and you can update the status" do
@@ -96,6 +96,15 @@ RSpec.describe 'Admin invoices show page' do
     expect(current_path).to eq "/admin/invoices/#{@invoice_1.id}"
 
     expect(page).to have_select(:status, :selected => "completed")
+  end
+
+  it "shows total and discounted revenue" do
+    discount = @merch_1.bulk_discounts.create!(name: "20% Off", percent_off: 0.20, threshold: 10)
+
+    visit "/admin/invoices/#{@invoice_1.id}"
+
+    expect(page).to have_content("Total Revenue: $500.00")
+    expect(page).to have_content("Total Revenue After Discounts: $400.00")
   end
 
 end
