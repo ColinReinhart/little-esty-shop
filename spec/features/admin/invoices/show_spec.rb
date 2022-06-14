@@ -99,10 +99,12 @@ RSpec.describe 'Admin invoices show page' do
   end
 
   it "shows total and discounted revenue" do
+    discount = @merch_1.bulk_discounts.create!(name: "20% Off", percent_off: 0.20, threshold: 10)
+
     visit "/admin/invoices/#{@invoice_1.id}"
 
     expect(page).to have_content("Total Revenue: $500.00")
-    expect(page).to have_content("Total Revenue After Discounts: $154.97")
+    expect(page).to have_content("Total Revenue After Discounts: $400.00")
   end
 
 end
