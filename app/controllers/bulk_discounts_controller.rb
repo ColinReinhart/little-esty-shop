@@ -1,4 +1,5 @@
 class BulkDiscountsController < ApplicationController
+  before_action :find_holidays
   before_action :do_merchant
 
   def index
@@ -50,4 +51,9 @@ class BulkDiscountsController < ApplicationController
     def bulk_discount_params
       params.permit(:name, :percent_off, :threshold)
     end
+
+    def find_holidays
+      @holidays = HolidaySearch.create_holidays
+    end
+
 end
